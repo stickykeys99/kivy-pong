@@ -77,10 +77,19 @@ class PongGame(Widget):
 
 class PongApp(App):
     def build(self):
-        game = PongGame()
-        game.serve_ball()
-        Clock.schedule_interval(game.update, 1.0/60.0)
-        return game
+
+        screens = {'Game':PongGame()}
+        # game = PongGame()
+        # game.serve_ball()
+        act_s = 'Game'
+
+        def update(dt):
+            screens[act_s].update(dt)
+
+        
+
+        Clock.schedule_interval(update, 1.0/60.0)
+        return screens[act_s]
 
 
 class PongBall(Widget):
