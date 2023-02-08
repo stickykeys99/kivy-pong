@@ -4,6 +4,7 @@ from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProper
 from kivy.vector import Vector
 from kivy.clock import Clock
 from random import random, randrange
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 
 
 class PongPaddle(Widget):
@@ -27,7 +28,7 @@ class PongPaddle(Widget):
             ball.velocity_y *= speedup
 
 
-class PongGame(Widget):
+class PongGame(Screen):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
@@ -75,21 +76,28 @@ class PongGame(Widget):
             # Clock.schedule_once(self.serve_ball_caller,1)
 
 
+class PongMenu(Screen):
+    def update(self, dt):
+        pass
+
+
 class PongApp(App):
     def build(self):
 
         # screens = {'Game':PongGame()}
-        game = PongGame()
-        game.serve_ball()
+        # game = PongGame()
+        # game.serve_ball()
         # act_s = 'Game'
 
         # def update(dt):
         #     screens[act_s].update(dt)
 
-        
+        sm = ScreenManager(transition=NoTransition())
+        sm.add_widget(PongMenu(name='menu'))
+        sm.add_widget(PongGame(name='game'))
 
-        Clock.schedule_interval(game.update, 1.0/60.0)
-        return game
+        Clock.schedule_interval(sm.current_screen.update, 1.0/60.0)
+        return sm
 
 
 class PongBall(Widget):
