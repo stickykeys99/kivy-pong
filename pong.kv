@@ -36,6 +36,12 @@
         center_y: root.center_y
         x: root.width - self.width
 
+<PongMenu>:
+    BoxLayout:
+        Button:
+            text: 'Start'
+            on_press: app.act_s: 'Game'
+
 <PongBall>:
     size: '50sp','50sp'
     canvas:

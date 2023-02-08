@@ -75,18 +75,21 @@ class PongGame(Widget):
             # Clock.schedule_once(self.serve_ball_caller,1)
 
 
+class PongMenu(Widget):
+    def update(self,dt):
+        pass
+
+
 class PongApp(App):
     def build(self):
 
-        screens = {'Game':PongGame()}
+        screens = {'Game':PongGame(),'Menu':PongMenu()}
         # game = PongGame()
         # game.serve_ball()
-        act_s = 'Game'
+        act_s = 'Menu'
 
         def update(dt):
             screens[act_s].update(dt)
-
-        
 
         Clock.schedule_interval(update, 1.0/60.0)
         return screens[act_s]
