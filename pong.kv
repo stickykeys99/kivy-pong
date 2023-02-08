@@ -1,22 +1,31 @@
-#:kivy 1.0.9
+#:kivy 1.4.0
+
+<PongManager>:
+
+    PongMenu:
+    
+    PongGame:
+
 
 <PongGame>:    
     ball: pong_ball
     player1: player_left
     player2: player_right
 
-    # canvas:
-    #     Rectangle:
-    #         pos: self.center_x - 5, 0
-    #         size: 10, self.height
+    canvas:
+        Rectangle:
+            pos: self.center_x - 5, 0
+            size: 10, self.height
             
     Label:
+        size_hint:None,None
         font_size: '70sp'  
         center_x: root.width / 4
         top: root.top - sp(50)
         text: str(root.player1.score)
         
     Label:
+        size_hint:None,None
         font_size: '70sp'  
         center_x: root.width * 3 / 4
         top: root.top - sp(50)
@@ -37,12 +46,14 @@
         x: root.width - self.width
 
 <PongMenu>:
-    BoxLayout:
-        Button:
-            text: 'Start'
-            on_press: root.manager.current = 'game'
+    Button:
+        size_hint:.15,.1
+        pos_hint:{'center_x':.5,'center_y':.5}
+        text: 'Start'
+        on_press: root.manager.current = 'game'
 
 <PongBall>:
+    size_hint:None,None
     size: '50sp','50sp'
     canvas:
         Ellipse:
@@ -50,6 +61,7 @@
             size: self.size
 
 <PongPaddle>:
+    size_hint:None,None
     size: '25sp','200sp'
     canvas:
         Rectangle:

@@ -1,6 +1,6 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
+from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 from random import random, randrange
@@ -29,9 +29,14 @@ class PongPaddle(Widget):
 
 
 class PongGame(Screen):
+    name = StringProperty('game')
+
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+
+    def on_enter(self):
+        self.serve_ball()
 
     def serve_ball(self):
         self.ball.center = self.center
@@ -77,26 +82,26 @@ class PongGame(Screen):
 
 
 class PongMenu(Screen):
+    name = StringProperty('menu')
+
     def update(self, dt):
         pass
 
 
+class PongManager(ScreenManager):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.transition = NoTransition()
+
+    def update(self, dt):
+        self.current_screen.update(dt)
+
+
 class PongApp(App):
     def build(self):
+        sm = PongManager()
 
-        # screens = {'Game':PongGame()}
-        # game = PongGame()
-        # game.serve_ball()
-        # act_s = 'Game'
-
-        # def update(dt):
-        #     screens[act_s].update(dt)
-
-        sm = ScreenManager(transition=NoTransition())
-        sm.add_widget(PongMenu(name='menu'))
-        sm.add_widget(PongGame(name='game'))
-
-        Clock.schedule_interval(sm.current_screen.update, 1.0/60.0)
+        Clock.schedule_interval(sm.update, 1.0/60.0)
         return sm
 
 
