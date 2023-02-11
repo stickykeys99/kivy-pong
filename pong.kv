@@ -1,11 +1,29 @@
 #:kivy 1.4.0
 
 <PongManager>:
-
+    pong_restart: id_pong_restart
     PongMenu:
-    
+
     PongGame:
 
+    PongRestart:
+        id: id_pong_restart
+
+<PongRestart>:
+    winner: root.winner
+    restart_label: id_restart_label
+    Label:
+        id: id_restart_label
+        size_hint: None, None
+        font_size: '30sp'
+        pos_hint: {'center_x':.5,'center_y':2/3.5}
+        text: ' wins!'
+
+    Button:
+        text: "Restart"
+        size_hint:.15,.1
+        pos_hint: {'center_x':.5,'center_y':1/2.5}
+        on_press: root.manager.current = 'game'
 
 <PongGame>:    
     ball: pong_ball

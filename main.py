@@ -1,3 +1,7 @@
+from kivy.config import Config
+
+Config.set('graphics','resizable',False)
+
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
@@ -5,6 +9,7 @@ from kivy.vector import Vector
 from kivy.clock import Clock
 from random import random, randrange
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
+from kivy.metrics import sp
 
 
 class PongPaddle(Widget):
@@ -34,6 +39,10 @@ class PongGame(Screen):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.winner = StringProperty('Player 0')
 
     def on_enter(self):
         self.serve_ball()
@@ -71,18 +80,35 @@ class PongGame(Screen):
             self.ball.velocity_y *= speedup
 
         # went of to a side to score point?
-        if self.ball.x < self.x - 30:
+        if self.ball.x < self.x - sp(30):
             self.player2.score += 1
             self.serve_ball()
+            if self.player2.score >= 11:
+                self.player1.score = 0
+                self.player2.score = 0
+                App.get_running_app().root.set_winner('Player 2')
+                App.get_running_app().root.current = 'restart'
             # Clock.schedule_once(self.serve_ball_caller,1)
-        if self.ball.right > self.width + 30:
+        if self.ball.right > self.width + sp(30):
             self.player1.score += 1
             self.serve_ball()
+            if self.player1.score >= 11:
+                self.player1.score = 0
+                self.player2.score = 0
+                App.get_running_app().root.set_winner('Player 1')
+                App.get_running_app().root.current = 'restart'
             # Clock.schedule_once(self.serve_ball_caller,1)
 
 
 class PongMenu(Screen):
     name = StringProperty('menu')
+
+    def update(self, dt):
+        pass
+
+
+class PongRestart(Screen):
+    name = StringProperty('restart')
 
     def update(self, dt):
         pass
@@ -95,6 +121,9 @@ class PongManager(ScreenManager):
 
     def update(self, dt):
         self.current_screen.update(dt)
+    
+    def set_winner(self, winner: str):
+        self.pong_restart.restart_label.text = winner + ' wins!'
 
 
 class PongApp(App):
