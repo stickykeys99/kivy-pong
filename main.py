@@ -52,7 +52,7 @@ class PongGame(Screen):
         self.ball.velocity = (0,0)
 
         def _serve_ball(dt):
-            self.ball.velocity = Vector(random()*randrange(-1,2,2),random()*randrange(-1,2,2)).normalize() * 4.0
+            self.ball.velocity = Vector(random()*randrange(-1,2,2),0.3*random()*randrange(-1,2,2)).normalize() * sp(4)
 
         Clock.schedule_once(_serve_ball,1.25)
 
